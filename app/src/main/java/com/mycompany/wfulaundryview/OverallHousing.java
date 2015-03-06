@@ -11,7 +11,7 @@ import android.widget.TextView;
 
 import com.mycompany.wfulaundryview.Remote.LongmanAPIHelper;
 
-//Hello
+//Hello Try again
 
 public class OverallHousing extends ActionBarActivity {
 
