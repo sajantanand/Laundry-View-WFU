@@ -46,8 +46,7 @@ public class HTTPSCall {
     }
 
 
-	/*
-	public String doRemoteCall() throws Exception {
+	public String doRemoteCall2() throws Exception {
 
 		HttpClient httpsClient = makeHTTPSClient();
 		HttpGet httpsGet = new HttpGet(urlValue);
@@ -63,7 +62,6 @@ public class HTTPSCall {
 		    }
 		return result;
 	}
-	*/
 
 	private HttpClient makeHTTPSClient() {
 		SchemeRegistry schemeRegistry = new SchemeRegistry();

@@ -1,5 +1,6 @@
 package com.mycompany.wfulaundryview;
 
+import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.app.ProgressDialog;
 import android.os.AsyncTask;
@@ -7,51 +8,83 @@ import android.util.Log;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
-import com.mycompany.wfulaundryview.Remote.LongmanAPIHelper;
+import com.mycompany.wfulaundryview.Remote.LaundryViewHelper;
+import com.mycompany.wfulaundryview.Remote.XMLParser;
+
+import java.util.List;
+import android.widget.TableLayout;
+import android.widget.TableRow;
+import android.widget.TextView;
+
+import android.os.Bundle;
+import android.app.Activity;
+import android.view.Menu;
+import android.view.ViewGroup.LayoutParams;
+import android.widget.Button;
+import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 
 //Hello Try again
 
 public class OverallHousing extends ActionBarActivity {
 
-    LongmanAPIHelper helper = new LongmanAPIHelper();
+    LaundryViewHelper helper = new LaundryViewHelper();
     private ProgressDialog progressDialog;
     private TextView tvWord;
+    List<XMLParser.LaundryRoom> rooms;
+    Intent startingIntent;
+
+    TableLayout rl1,rl2;
+    ScrollView sv;
+
+
+    public final static String EXTRA_MESSAGE = "com.mycompany.wfulaundryview.OverallHousing.Message";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_overall_housing);
+        startingIntent = getIntent();
+
+        rl1=(TableLayout) findViewById(R.id.rl);
+        sv=new ScrollView(OverallHousing.this);
+        rl2=new TableLayout(OverallHousing.this);
 
         tvWord = ((TextView) findViewById(R.id.textView1));
         showProgressDialog();
-        new RetrieveDictionaryEntryTask().execute((Void)null);
+        new RetrieveBuildingInfo().execute((Void)null);
     }
 
-    private void completeEntryLoad(String entry) {
+    private void completeEntryLoad(Boolean success) {
         if (progressDialog != null) {
             progressDialog.dismiss();
         }
-        if (entry != null) {
-            tvWord.setText(entry);
+        if (success != true) {
+            //tvWord.setText(entry);
+            setTableLayout(rooms);
         } else {
             tvWord.setText("Formatting error in returned response. Please try again.");
         }
     }
 
     private void showProgressDialog() {
-        progressDialog = ProgressDialog.show(this, "", "Getting Definition...", true);
+        progressDialog = ProgressDialog.show(this, "", "Getting Dorm Information. . .", true);
     }
 
     /**
      * AsyncTask for retrieval of Definition.
      */
-    class RetrieveDictionaryEntryTask extends AsyncTask<Void, Void, String> {
+    class RetrieveBuildingInfo extends AsyncTask<Void, Void, Boolean> {
         @Override
-        protected String doInBackground(Void... arg0) {
+        protected Boolean doInBackground(Void... arg0) {
             try {
-                return helper.getXML();
+                rooms = helper.getXML();
+                Boolean entry = rooms.size() == 0;
+                return entry;
             } catch (Exception e) {
                 Log.w(Settings.LOG_TAG, e.getClass().getSimpleName() + ", " + e.getMessage());
                 return null;
@@ -59,11 +92,57 @@ public class OverallHousing extends ActionBarActivity {
         }
 
         @Override
-        protected void onPostExecute(String entry) {
+        protected void onPostExecute(Boolean entry) {
             completeEntryLoad(entry);
         }
 
     }
+
+    private void setTableLayout(List<XMLParser.LaundryRoom> roomList) {
+
+        rl1.setStretchAllColumns(true);
+
+        for(int i=0;i<rooms.size();i++)
+        {
+           /* b[i]=new Button(this);
+            RelativeLayout.LayoutParams params=new RelativeLayout.LayoutParams(
+                    (int)LayoutParams.WRAP_CONTENT,(int)LayoutParams.WRAP_CONTENT);
+            params.leftMargin=50;
+            params.topMargin=sum;
+            b[i].setText("Button "+i);
+            b[i].setLayoutParams(params);
+            rl2.addView(b[i]);
+            sum=sum+100;*/
+
+            TableRow row1 = new TableRow(this);
+            Button text1 = new Button(this);
+            text1.setWidth(sv.getWidth());
+            final int j = i;
+            text1.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    String[] entry = {rooms.get(j).laundry_room_name, rooms.get(j).location};
+                    sendMessage(entry);
+                }
+            });
+            text1.setText(rooms.get(i).laundry_room_name);
+            row1.addView(text1);
+            rl2.addView(row1);
+        }
+
+        rl2.setStretchAllColumns(true);
+        sv.addView(rl2);
+        rl1.addView(sv);
+    }
+
+    private void sendMessage(String[] entry)
+    {
+        Intent intent = new Intent(this,IndividualHousing.class);
+        intent.putExtra(EXTRA_MESSAGE, entry);
+        startActivity(intent);
+    }
+
+
 
 
 

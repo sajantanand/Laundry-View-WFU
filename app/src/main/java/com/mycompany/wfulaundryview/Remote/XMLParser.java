@@ -11,13 +11,27 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.crypto.Mac;
+
 /**
  * Created by kjdavis0201 on 3/4/15.
  */
 public class XMLParser {
     private static final String ns = null;
 
-    public List<LaundryRoom> parse(InputStream in) throws XmlPullParserException, IOException {
+    public static class LaundryRoom {
+        public final String location;
+        public final String laundry_room_name;
+        public final String status;
+
+        private LaundryRoom(String location, String laundry_room_name, String status) {
+            this.location = location;
+            this.laundry_room_name = laundry_room_name;
+            this.status = status;
+        }
+    }
+
+    public List<LaundryRoom> parseRooms(InputStream in) throws XmlPullParserException, IOException {
         try {
             XmlPullParser parser = Xml.newPullParser();
             parser.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, false);
@@ -49,18 +63,6 @@ public class XMLParser {
         }
 
         return entries;
-    }
-
-    public static class LaundryRoom {
-        public final String location;
-        public final String laundry_room_name;
-        public final String status;
-
-        private LaundryRoom(String location, String laundry_room_name, String status) {
-            this.location = location;
-            this.laundry_room_name = laundry_room_name;
-            this.status = status;
-        }
     }
 
     private List<LaundryRoom> readEntry(XmlPullParser parser) throws XmlPullParserException, IOException {
@@ -100,13 +102,13 @@ public class XMLParser {
 
             String name = parser2.getName();
             if (name.equals("location")) {
-                location = readLocation(parser2);
+                location = readInfo(parser2, "location");
                 //return "success for location";
             } else if (name.equals("laundry_room_name")) {
-                laundry_room_name = readRoomName(parser2);
+                laundry_room_name = readInfo(parser2, "laundry_room_name");
                 //return "success for laundry room";
             } else if (name.equals("status")) {
-                status = readStatus(parser2);
+                status = readInfo(parser2, "status");
                 //return "success for status";
             } else {
                 skip(parser2);
@@ -116,27 +118,6 @@ public class XMLParser {
         //return "failure";
         return new LaundryRoom(location, laundry_room_name, status);
 
-    }
-
-    private String readLocation(XmlPullParser parser) throws XmlPullParserException, IOException {
-        parser.require(XmlPullParser.START_TAG, ns, "location");
-        String location = readText(parser);
-        parser.require(XmlPullParser.END_TAG, ns, "location");
-        return location;
-    }
-
-    private String readRoomName(XmlPullParser parser) throws XmlPullParserException, IOException{
-        parser.require(XmlPullParser.START_TAG, ns, "laundry_room_name");
-        String laundry_room_name = readText(parser);
-        parser.require(XmlPullParser.END_TAG, ns, "laundry_room_name");
-        return laundry_room_name;
-    }
-
-    private String readStatus(XmlPullParser parser) throws XmlPullParserException, IOException{
-        parser.require(XmlPullParser.START_TAG, ns, "status");
-        String status = readText(parser);
-        parser.require(XmlPullParser.END_TAG, ns, "status");
-        return status;
     }
 
     private String readText(XmlPullParser parser) throws XmlPullParserException, IOException {
@@ -167,5 +148,187 @@ public class XMLParser {
         }
 
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    public static class MachineList {
+        public final String machineCode;
+        public final String roomStatus;
+        public final String type;
+        public final String machineStatus;
+        public final String label;
+        public final String cycleTime;
+        public final String timeRemaining;
+
+        private MachineList() {
+            machineCode = null;
+            roomStatus = null;
+            type = null;
+            machineStatus = null;
+            label = null;
+            cycleTime = null;
+            timeRemaining = null;
+        }
+
+        private MachineList(String machineCode, String roomStatus, String type, String machineStatus, String label, String cycleTime, String timeRemaining) {
+            this.machineCode = machineCode;
+            this.roomStatus = roomStatus;
+            this.type = type;
+            this.machineStatus = machineStatus;
+            this.label = label;
+            this.cycleTime = cycleTime;
+            this.timeRemaining = timeRemaining;
+        }
+    }
+
+    public List<MachineList> parseBuilding(InputStream in) throws XmlPullParserException, IOException {
+        try {
+            XmlPullParser parser = Xml.newPullParser();
+            parser.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, false);
+            parser.setInput(in, null);
+            parser.nextTag();
+            Log.i("info", "testing");
+            //while ()
+            return readFeed2(parser);
+        } finally {
+            in.close();
+        }
+    }
+
+    private List<MachineList> readFeed2(XmlPullParser parser2) throws XmlPullParserException, IOException {
+        List<MachineList> entries = new ArrayList<>();
+
+        parser2.require(XmlPullParser.START_TAG, ns, "laundry_room");
+        while (parser2.next() != XmlPullParser.END_TAG) {
+            if (parser2.getEventType() != XmlPullParser.START_TAG) {
+                continue;
+            }
+            String name = parser2.getName();
+            if (name.equals("appliances")) {
+                entries = readEntry2(parser2);
+                Log.i("info", "object added");
+            } else {
+                skip(parser2);
+            }
+        }
+
+        return entries;
+    }
+
+    private List<MachineList> readEntry2(XmlPullParser parser) throws XmlPullParserException, IOException {
+        parser.require(XmlPullParser.START_TAG, ns, "appliances");
+        List<MachineList> entries = new ArrayList<>();
+
+        while (parser.next() != XmlPullParser.END_TAG) {
+            if (parser.getEventType() != XmlPullParser.START_TAG) {
+                continue;
+            }
+
+            String name = parser.getName();
+            if (name.equals("appliance")) {
+                entries.add(readRoom2(parser));
+                //return readRoom(parser);
+            } else {
+                skip(parser);
+            }
+        }
+
+        //return room;
+        //return "failure";
+        return entries;
+
+    }
+
+    private MachineList readRoom2(XmlPullParser parser2) throws XmlPullParserException, IOException {
+        parser2.require(XmlPullParser.START_TAG, ns, "appliance");
+        String machineCode = null;
+        String roomStatus = null;
+        String type = null;
+        String machineStatus = null;
+        String label = null;
+        String cycleTime = null;
+        String timeRemaining = null;
+
+        while(parser2.next() != XmlPullParser.END_TAG) {
+            if (parser2.getEventType() != XmlPullParser.START_TAG) {
+                continue;
+            }
+
+            String name = parser2.getName();
+            if (name.equals("appliance_desc_key")) {
+                machineCode = readInfo(parser2, "appliance_desc_key");
+                //return "success for location";
+            } else if (name.equals("lrm_status")) {
+                roomStatus = readInfo(parser2, "lrm_status");
+                //return "success for laundry room";
+            } else if (name.equals("appliance_type")) {
+                type = readInfo(parser2, "appliance_type");
+                //return "success for status";
+            } else if (name.equals("status")) {
+                machineStatus = readInfo(parser2, "status");
+            } else if (name.equals("label")) {
+                label = readInfo(parser2, "label");
+            } else if (name.equals("avg_cycle_time")) {
+                cycleTime = readInfo(parser2, "avg_cycle_time");
+            } else if (name.equals("time_remaining")) {
+                timeRemaining = readInfo(parser2, "time_remaining");
+            }
+            else {
+                skip(parser2);
+            }
+        }
+
+        //return "failure";
+        return new MachineList(machineCode, roomStatus, type, machineStatus, label, cycleTime, timeRemaining);
+
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    private String readInfo(XmlPullParser parser, String keyName) throws XmlPullParserException, IOException{
+        parser.require(XmlPullParser.START_TAG, ns, keyName);
+        String status = readText(parser);
+        parser.require(XmlPullParser.END_TAG, ns, keyName);
+        return status;
+    }
+
+
+
+
 
 }

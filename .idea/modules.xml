@@ -3,7 +3,6 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/Laundry-View-WFU.iml" filepath="$PROJECT_DIR$/Laundry-View-WFU.iml" />
-      <module fileurl="file://$PROJECT_DIR$/WFULaundryView.iml" filepath="$PROJECT_DIR$/WFULaundryView.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
     </modules>
   </component>
