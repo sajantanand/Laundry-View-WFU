@@ -11,6 +11,9 @@ import android.view.MenuItem;
 import android.content.Intent;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
@@ -34,6 +37,9 @@ public class IndividualHousing extends ActionBarActivity {
 
     String[] fileToPlay;
 
+    TableLayout rl1,rl2;
+    ScrollView sv;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,7 +55,11 @@ public class IndividualHousing extends ActionBarActivity {
         setTitle(fileToPlay[0]);
 
         text1 = (TextView) findViewById(R.id.textView2);
-        text1.setText(fileToPlay[1]);
+        //text1.setText(fileToPlay[1]);
+
+        rl1=(TableLayout) findViewById(R.id.rl);
+        sv=new ScrollView(IndividualHousing.this);
+        rl2=new TableLayout(IndividualHousing.this);
 
         showProgressDialog();
         new RetrieveBuildingInfo().execute((Void)null);
@@ -66,7 +76,7 @@ public class IndividualHousing extends ActionBarActivity {
         }
         if (success == true) {
             //text1.setText(building.siz);
-            setTableLayout(building);
+            setTableLayout();
             //text1.setText(returnValue);
         } else {
             text1.setText("Formatting error in returned response. Please try again.");
@@ -106,37 +116,13 @@ public class IndividualHousing extends ActionBarActivity {
 
     }
 
-    private void setTableLayout(List<XMLParser.MachineList> roomList) {
+    private void setTableLayout() {
 
-        TableLayout MainLayout = new TableLayout(this);
+        /*TableLayout MainLayout = new TableLayout(this);
         MainLayout.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.FILL_PARENT, TableRow.LayoutParams.FILL_PARENT));
         MainLayout.setStretchAllColumns(true);
         MainLayout.setPadding(16, 16, 16, 16);
 
-       /* //Create the first row and add two text views
-        TableRow row1 = new TableRow(this);
-        TextView text1 = new TextView(this);
-        text1.setText("Test1");
-        TextView text2 = new TextView(this);
-        text2.setText("Test2");
-        text2.setGravity(android.view.Gravity.RIGHT);
-        row1.addView(text1);
-        row1.addView(text2);
-        MainLayout.addView(row1);
-
-        //Create the second row and add two text views
-        TableRow row2 = new TableRow(this);
-        TextView text3 = new TextView(this);
-        text3.setText("Test3");
-        TextView text4 = new TextView(this);
-        text4.setText("Test4");
-        text4.setGravity(android.view.Gravity.RIGHT);
-        row2.addView(text3);
-        row2.addView(text4);
-        MainLayout.addView(row2);
-
-        //Set the view
-        setContentView(MainLayout);*/
 
         for(int i=0;i<roomList.size();i++)
         {
@@ -145,43 +131,83 @@ public class IndividualHousing extends ActionBarActivity {
             row1.setPadding(0, 5, 0, 5);
             TextView text2 = new TextView(this);
             TextView text3 = new TextView(this);
+            CheckBox box1 = new CheckBox(this);
 
             text2.setText(building.get(i).type + " " + building.get(i).label);
             text3.setText(building.get(i).timeRemaining);
-            text3.setGravity(Gravity.RIGHT);
+            text3.setGravity(Gravity.CENTER_HORIZONTAL);
+            box1.setGravity(Gravity.RIGHT);
             row1.addView(text2);
             row1.addView(text3);
+            row1.addView(box1);
             MainLayout.addView(row1);
+        }
 
-           /* b[i]=new Button(this);
+        *//*sv.addView(rl2);
+        rl1.addView(sv);*//*
+        setContentView(MainLayout);*/
+
+
+
+        rl1.setStretchAllColumns(true);
+
+        for(int i=0;i<building.size();i++)
+        {
+            /*
+           // b[i]=new Button(this);
             RelativeLayout.LayoutParams params=new RelativeLayout.LayoutParams(
-                    (int)LayoutParams.WRAP_CONTENT,(int)LayoutParams.WRAP_CONTENT);
+                    (int) RelativeLayout.LayoutParams.WRAP_CONTENT,(int) RelativeLayout.LayoutParams.WRAP_CONTENT);
             params.leftMargin=50;
             params.topMargin=sum;
             b[i].setText("Button "+i);
             b[i].setLayoutParams(params);
             rl2.addView(b[i]);
-            sum=sum+100;*/
+            sum=sum+100;*//*
+            */
 
-            /*TableRow row1 = new TableRow(this);
-            Button text1 = new Button(this);
-            text1.setWidth(sv.getWidth());
-            final int j = i;
-            text1.setOnClickListener(new View.OnClickListener() {
+            TableRow row1 = new TableRow(this);
+            row1.setPadding(0, 5, 0, 5);
+            TextView text2 = new TextView(this);
+            TextView text3 = new TextView(this);
+            CheckBox box1 = new CheckBox(this);
+
+            text2.setText(building.get(i).type + " " + building.get(i).label);
+            text3.setText(building.get(i).timeRemaining);
+            text3.setGravity(Gravity.CENTER_HORIZONTAL);
+
+            if (building.get(i).timeRemaining.equals("available"))
+            {
+                box1.setEnabled(false);
+            }
+
+            box1.setGravity(Gravity.RIGHT);
+            //box1.setPadding(0, 0, 0, -5);
+            //box1.setScrollY(-5);
+            //box1.setHeight(-5);
+            //box1.s
+            row1.addView(text2);
+            row1.addView(text3);
+            row1.addView(box1);
+
+            //TableRow row1 = new TableRow(this);
+            //Button text1 = new Button(this);
+            //text1.setWidth(sv.getWidth());
+            //final int j = i;
+            /*text1.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    String entry = rooms.get(j).location;
+                    String[] entry = {rooms.get(j).laundry_room_name, rooms.get(j).location};
                     sendMessage(entry);
                 }
-            });
-            text1.setText(rooms.get(i).laundry_room_name);
-            row1.addView(text1);
-            rl2.addView(row1);*/
+            });*/
+            //text1.setText(rooms.get(i).laundry_room_name);
+            //row1.addView(text1);
+            rl2.addView(row1);
         }
 
-        /*sv.addView(rl2);
-        rl1.addView(sv);*/
-        setContentView(MainLayout);
+        rl2.setStretchAllColumns(true);
+        sv.addView(rl2);
+        rl1.addView(sv);
     }
 
 

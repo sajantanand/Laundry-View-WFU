@@ -65,7 +65,7 @@ public class OverallHousing extends ActionBarActivity {
         }
         if (success != true) {
             //tvWord.setText(entry);
-            setTableLayout(rooms);
+            setTableLayout();
         } else {
             tvWord.setText("Formatting error in returned response. Please try again.");
         }
@@ -98,7 +98,7 @@ public class OverallHousing extends ActionBarActivity {
 
     }
 
-    private void setTableLayout(List<XMLParser.LaundryRoom> roomList) {
+    private void setTableLayout() {
 
         rl1.setStretchAllColumns(true);
 
