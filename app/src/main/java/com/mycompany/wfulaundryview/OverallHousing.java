@@ -1,6 +1,7 @@
 package com.mycompany.wfulaundryview;
 
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.support.v7.app.ActionBarActivity;
 import android.app.ProgressDialog;
 import android.os.AsyncTask;
@@ -59,11 +60,11 @@ public class OverallHousing extends ActionBarActivity {
         new RetrieveBuildingInfo().execute((Void)null);
     }
 
-    private void completeEntryLoad(Boolean success) {
+    private void completeEntryLoad(Boolean failure) {
         if (progressDialog != null) {
             progressDialog.dismiss();
         }
-        if (success != true) {
+        if (failure != true) {
             //tvWord.setText(entry);
             setTableLayout();
         } else {
@@ -83,7 +84,13 @@ public class OverallHousing extends ActionBarActivity {
         protected Boolean doInBackground(Void... arg0) {
             try {
                 rooms = helper.getXML();
-                Boolean entry = rooms.size() == 0;
+                Boolean entry;
+                try {
+                    entry = (rooms.size() == 0);
+                } catch (NullPointerException n)
+                {
+                    entry = true;
+                }
                 return entry;
             } catch (Exception e) {
                 Log.w(Settings.LOG_TAG, e.getClass().getSimpleName() + ", " + e.getMessage());
@@ -127,6 +134,8 @@ public class OverallHousing extends ActionBarActivity {
             });
             text1.setText(rooms.get(i).laundry_room_name);
             row1.addView(text1);
+            //row1.setBackground(Drawable.createFromPath(R.drawable.border));
+            //row1.
             rl2.addView(row1);
         }
 

@@ -10,8 +10,11 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.content.Intent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TableLayout;
@@ -35,7 +38,7 @@ public class IndividualHousing extends ActionBarActivity {
 
     String returnValue;
 
-    String[] fileToPlay;
+    String[] buildingCode;
 
     TableLayout rl1,rl2;
     ScrollView sv;
@@ -48,11 +51,11 @@ public class IndividualHousing extends ActionBarActivity {
 
         //fileToPlay = intent.getStringExtra(OverallHousing.EXTRA_MESSAGE);
 
-        fileToPlay = intent.getStringArrayExtra(OverallHousing.EXTRA_MESSAGE);
+        buildingCode = intent.getStringArrayExtra(OverallHousing.EXTRA_MESSAGE);
 
         setContentView(R.layout.activity_individual_housing);
 
-        setTitle(fileToPlay[0]);
+        setTitle(buildingCode[0]);
 
         text1 = (TextView) findViewById(R.id.textView2);
         //text1.setText(fileToPlay[1]);
@@ -94,7 +97,7 @@ public class IndividualHousing extends ActionBarActivity {
         @Override
         protected Boolean doInBackground(Void... arg0) {
             try {
-                building = helper.getMachines(fileToPlay[1]);
+                building = helper.getMachines(buildingCode[1]);
 
                 //returnValue = helper.getMachines(fileToPlay);
                 Boolean entry = true;
@@ -166,27 +169,84 @@ public class IndividualHousing extends ActionBarActivity {
             */
 
             TableRow row1 = new TableRow(this);
-            row1.setPadding(0, 5, 0, 5);
+            row1.setPadding(0, 10, 0, 10);
             TextView text2 = new TextView(this);
             TextView text3 = new TextView(this);
+            ImageView image1 = new ImageView(this);
             CheckBox box1 = new CheckBox(this);
+            String available;
 
             text2.setText(building.get(i).type + " " + building.get(i).label);
-            text3.setText(building.get(i).timeRemaining);
+            available = building.get(i).timeRemaining;
+            if (available.contains("cycle"))
+            {
+            available = "available";
+            }
+            else if (available.startsWith("est."))
+            {
+                int n = available.length();
+                char[] test = new char[1];
+                int j = 1;
+                do {
+                    available.getChars(n-5-j,n-4-j,test, 0);
+                    j++;
+                } while (Character.isDigit(test[0]));
+                available = available.substring(n-6);
+            }
+
+            text3.setText(available);
+
+            //image1.setImageDrawable(getDrawable(R.drawable.available));
+            //image1.setBackgroundResource(R.drawable.available32);
+            image1.setImageResource(R.drawable.available32);
+            //RelativeLayout.LayoutParams params=new RelativeLayout.LayoutParams((int)LayoutParams.WRAP_CONTENT,(int)LayoutParams.WRAP_CONTENT);
+            //image1.setLayoutParams(new ViewGroup.LayoutParams((int) ViewGroup.LayoutParams.FILL_PARENT,(int)ViewGroup.LayoutParams.FILL_PARENT));
+            //image1.setMaxWidth(30);
+            //image1.setMaxHeight(30);
+            //image1.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.FILL_PARENT));
+            //TableRow.LayoutParams params = new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT, TableRow.LayoutParams.MATCH_PARENT);
+
             text3.setGravity(Gravity.CENTER_HORIZONTAL);
 
-            if (building.get(i).timeRemaining.equals("available"))
+            if (available.equals("available"))
             {
                 box1.setEnabled(false);
             }
 
-            box1.setGravity(Gravity.RIGHT);
+            box1.setGravity(Gravity.END);
             //box1.setPadding(0, 0, 0, -5);
             //box1.setScrollY(-5);
             //box1.setHeight(-5);
             //box1.s
+
+            //int height = row
             row1.addView(text2);
-            row1.addView(text3);
+
+            //text3.setText(row1.getHeight() + "");
+
+            //int height = row1.getHeight();
+            //TableRow.LayoutParams params2 = new TableRow.LayoutParams(2, 50);
+            //TableRow.LayoutParams params = new TableRow.LayoutParams(height, height);
+            //image1.setLayoutParams(params2);
+            //image1.setScaleType(ImageView.ScaleType.FIT_CENTER);
+
+
+            //LinearLayout.LayoutParams linearParams = new LinearLayout.LayoutParams(20, 20);
+            //image1.setLayoutParams(new ViewGroup.LayoutParams(10, 10));
+
+            //image1.getLayoutParams().width = row1.getHeight();
+
+            if (available.equals("available")) {
+                row1.addView(image1);
+/*                TableRow.LayoutParams params2 = new TableRow.LayoutParams(height, height);
+                image1.setLayoutParams(params2);
+                image1.getLayoutParams().height = 20;
+                image1.getLayoutParams().width = 20;*/
+            }
+            else {
+                row1.addView(text3);
+            }
+
             row1.addView(box1);
 
             //TableRow row1 = new TableRow(this);
@@ -202,16 +262,17 @@ public class IndividualHousing extends ActionBarActivity {
             });*/
             //text1.setText(rooms.get(i).laundry_room_name);
             //row1.addView(text1);
+            row1.setBackgroundResource(R.drawable.border);
+            row1.setGravity(Gravity.CENTER_VERTICAL);
             rl2.addView(row1);
         }
-
         rl2.setStretchAllColumns(true);
         sv.addView(rl2);
+
+        //rl1.
+
         rl1.addView(sv);
     }
-
-
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
