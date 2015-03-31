@@ -58,7 +58,7 @@ public class IndividualHousing extends ActionBarActivity {
 
         setTitle(buildingCode[0]);
 
-        text1 = (TextView) findViewById(R.id.textView2);
+        //text1 = (TextView) findViewById(R.id.textView2);
         //text1.setText(fileToPlay[1]);
 
         rl1=(TableLayout) findViewById(R.id.rl);
@@ -83,7 +83,7 @@ public class IndividualHousing extends ActionBarActivity {
             setTableLayout();
             //text1.setText(returnValue);
         } else {
-            text1.setText("Formatting error in returned response. Please try again.");
+            //text1.setText("Formatting error in returned response. Please try again.");
         }
     }
 
@@ -154,6 +154,27 @@ public class IndividualHousing extends ActionBarActivity {
 
 
         rl1.setStretchAllColumns(true);
+        rl2.setStretchAllColumns(true);
+
+        TableRow row1 = new TableRow(this);
+        TextView text2 = new TextView(this);
+        TextView text3 = new TextView(this);
+        TextView text4 = new TextView(this);
+
+        text2.setText("Machine Type");
+        text2.setGravity(Gravity.LEFT);
+
+        text3.setText("Status");
+        text3.setGravity(Gravity.RIGHT);
+
+        text4.setText("Reminder");
+        text4.setGravity(Gravity.CENTER_HORIZONTAL);
+
+        row1.addView(text2);
+        row1.addView(text3);
+        row1.addView(text4);
+
+        rl2.addView(row1);
 
         for(int i=0;i<building.size();i++)
         {
@@ -169,10 +190,10 @@ public class IndividualHousing extends ActionBarActivity {
             sum=sum+100;*//*
             */
 
-            TableRow row1 = new TableRow(this);
+            row1 = new TableRow(this);
             row1.setPadding(0, 10, 0, 10);
-            TextView text2 = new TextView(this);
-            TextView text3 = new TextView(this);
+            text2 = new TextView(this);
+            text3 = new TextView(this);
             ImageView image1 = new ImageView(this);
             CheckBox box1 = new CheckBox(this);
             String available;
