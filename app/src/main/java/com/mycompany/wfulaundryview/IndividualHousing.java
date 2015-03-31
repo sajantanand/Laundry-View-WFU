@@ -22,6 +22,7 @@ import android.widget.TableRow;
 import android.widget.TextView;
 
 import com.mycompany.wfulaundryview.Remote.LaundryViewHelper;
+import com.mycompany.wfulaundryview.Remote.MachineList;
 import com.mycompany.wfulaundryview.Remote.XMLParser;
 
 import java.util.ArrayList;
@@ -33,7 +34,7 @@ public class IndividualHousing extends ActionBarActivity {
     private TextView text1;
     LaundryViewHelper helper = new LaundryViewHelper();
 
-    List<XMLParser.MachineList> building = new ArrayList<>();
+    List<MachineList> building = new ArrayList<>();
     private ProgressDialog progressDialog;
 
     String returnValue;

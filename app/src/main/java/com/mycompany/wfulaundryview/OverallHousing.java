@@ -13,6 +13,7 @@ import android.view.View;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
+import com.mycompany.wfulaundryview.Remote.LaundryRoom;
 import com.mycompany.wfulaundryview.Remote.LaundryViewHelper;
 import com.mycompany.wfulaundryview.Remote.XMLParser;
 
@@ -36,7 +37,7 @@ public class OverallHousing extends ActionBarActivity {
     LaundryViewHelper helper = new LaundryViewHelper();
     private ProgressDialog progressDialog;
     private TextView tvWord;
-    List<XMLParser.LaundryRoom> rooms;
+    List<LaundryRoom> rooms;
     Intent startingIntent;
 
     TableLayout rl1,rl2;
