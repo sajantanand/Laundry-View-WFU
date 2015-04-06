@@ -11,8 +11,6 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.crypto.Mac;
-
 /**
  * Created by kjdavis0201 on 3/4/15.
  */
@@ -240,16 +238,10 @@ public class XMLParser {
 
     }
 
-
     private String readInfo(XmlPullParser parser, String keyName) throws XmlPullParserException, IOException{
         parser.require(XmlPullParser.START_TAG, ns, keyName);
         String status = readText(parser);
         parser.require(XmlPullParser.END_TAG, ns, keyName);
         return status;
     }
-
-
-
-
-
 }
