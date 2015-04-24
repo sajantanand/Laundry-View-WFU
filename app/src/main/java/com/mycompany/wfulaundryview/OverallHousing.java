@@ -13,6 +13,7 @@ import android.view.View;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
+import com.mycompany.wfulaundryview.Remote.LaundryRoom;
 import com.mycompany.wfulaundryview.Remote.LaundryViewHelper;
 import com.mycompany.wfulaundryview.Remote.XMLParser;
 
@@ -35,8 +36,8 @@ public class OverallHousing extends ActionBarActivity {
 
     LaundryViewHelper helper = new LaundryViewHelper();
     private ProgressDialog progressDialog;
-    //private TextView tvWord;
-    List<XMLParser.LaundryRoom> rooms;
+    private TextView tvWord;
+    List<LaundryRoom> rooms;
     Intent startingIntent;
 
     TableLayout rl1,rl2;
@@ -55,7 +56,7 @@ public class OverallHousing extends ActionBarActivity {
         sv=new ScrollView(OverallHousing.this);
         rl2=new TableLayout(OverallHousing.this);
 
-        //tvWord = ((TextView) findViewById(R.id.textView1));
+        tvWord = ((TextView) findViewById(R.id.textView1));
         showProgressDialog();
         new RetrieveBuildingInfo().execute((Void)null);
     }
@@ -68,7 +69,7 @@ public class OverallHousing extends ActionBarActivity {
             //tvWord.setText(entry);
             setTableLayout();
         } else {
-            //tvWord.setText("Formatting error in returned response. Please try again.");
+            tvWord.setText("Formatting error in returned response. Please try again.");
         }
     }
 
@@ -150,44 +151,6 @@ public class OverallHousing extends ActionBarActivity {
         intent.putExtra(EXTRA_MESSAGE, entry);
         startActivity(intent);
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

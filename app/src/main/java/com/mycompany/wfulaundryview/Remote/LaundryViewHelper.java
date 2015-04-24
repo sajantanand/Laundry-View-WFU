@@ -13,19 +13,19 @@ import java.util.List;
 public class LaundryViewHelper {
 
 
-    public List<XMLParser.LaundryRoom> getXML() throws Exception {
+    public List<LaundryRoom> getXML() throws Exception {
         String url = "http://api.laundryview.com/school/?api_key=8c31a4878805ea4fe690e48fddbfffe1&method=getRoomData";
         HTTPSCall call = new HTTPSCall(url);
         Log.i(Settings.LOG_TAG, url);
-        List<XMLParser.LaundryRoom> rooms = new XMLParser().parseRooms(call.doRemoteCall());
+        List<LaundryRoom> rooms = new XMLParser().parseRooms(call.doRemoteCall());
         return rooms;
     }
 
-    public List<XMLParser.MachineList> getMachines(String code) throws Exception {
+    public List<MachineList> getMachines(String code) throws Exception {
         String url = "http://api.laundryview.com/room/?api_key=8c31a4878805ea4fe690e48fddbfffe1&method=getAppliances&location=" + code;
         HTTPSCall call = new HTTPSCall(url);
         Log.i(Settings.LOG_TAG, url);
-        List<XMLParser.MachineList> building = new XMLParser().parseBuilding(call.doRemoteCall());
+        List<MachineList> building = new XMLParser().parseBuilding(call.doRemoteCall());
         return building;
     }
 

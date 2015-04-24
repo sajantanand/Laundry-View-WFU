@@ -11,25 +11,11 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.crypto.Mac;
-
 /**
  * Created by kjdavis0201 on 3/4/15.
  */
 public class XMLParser {
     private static final String ns = null;
-
-    public static class LaundryRoom {
-        public final String location;
-        public final String laundry_room_name;
-        public final String status;
-
-        private LaundryRoom(String location, String laundry_room_name, String status) {
-            this.location = location;
-            this.laundry_room_name = laundry_room_name;
-            this.status = status;
-        }
-    }
 
     public List<LaundryRoom> parseRooms(InputStream in) throws XmlPullParserException, IOException {
         try {
@@ -150,57 +136,6 @@ public class XMLParser {
     }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    public static class MachineList {
-        public final String machineCode;
-        public final String roomStatus;
-        public final String type;
-        public final String machineStatus;
-        public final String label;
-        public final String cycleTime;
-        public final String timeRemaining;
-
-        private MachineList() {
-            machineCode = null;
-            roomStatus = null;
-            type = null;
-            machineStatus = null;
-            label = null;
-            cycleTime = null;
-            timeRemaining = null;
-        }
-
-        private MachineList(String machineCode, String roomStatus, String type, String machineStatus, String label, String cycleTime, String timeRemaining) {
-            this.machineCode = machineCode;
-            this.roomStatus = roomStatus;
-            this.type = type;
-            this.machineStatus = machineStatus;
-            this.label = label;
-            this.cycleTime = cycleTime;
-            this.timeRemaining = timeRemaining;
-        }
-    }
-
     public List<MachineList> parseBuilding(InputStream in) throws XmlPullParserException, IOException {
         try {
             XmlPullParser parser = Xml.newPullParser();
@@ -303,32 +238,10 @@ public class XMLParser {
 
     }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     private String readInfo(XmlPullParser parser, String keyName) throws XmlPullParserException, IOException{
         parser.require(XmlPullParser.START_TAG, ns, keyName);
         String status = readText(parser);
         parser.require(XmlPullParser.END_TAG, ns, keyName);
         return status;
     }
-
-
-
-
-
 }
