@@ -295,6 +295,10 @@ public class IndividualHousing extends ActionBarActivity {
         rl1.addView(sv);
     }
 
+
+
+
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
