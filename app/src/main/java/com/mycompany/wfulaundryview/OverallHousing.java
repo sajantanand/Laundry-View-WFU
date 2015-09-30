@@ -65,7 +65,7 @@ public class OverallHousing extends ActionBarActivity {
         if (progressDialog != null) {
             progressDialog.dismiss();
         }
-        if (failure != true) {
+        if (failure != null && failure != true) {
             //tvWord.setText(entry);
             setTableLayout();
         } else {

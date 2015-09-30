@@ -1,6 +1,7 @@
 package com.mycompany.wfulaundryview;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.os.AsyncTask;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
@@ -13,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -20,6 +22,7 @@ import android.widget.ScrollView;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.mycompany.wfulaundryview.Remote.LaundryViewHelper;
 import com.mycompany.wfulaundryview.Remote.MachineList;
@@ -78,7 +81,7 @@ public class IndividualHousing extends ActionBarActivity {
         if (progressDialog != null) {
             progressDialog.dismiss();
         }
-        if (success == true) {
+        if (success != null && success) {
             //text1.setText(building.siz);
             setTableLayout();
             //text1.setText(returnValue);
@@ -157,18 +160,19 @@ public class IndividualHousing extends ActionBarActivity {
         rl2.setStretchAllColumns(true);
 
         TableRow row1 = new TableRow(this);
+        row1.setPadding(0, 10, 0, 10);
         TextView text2 = new TextView(this);
         TextView text3 = new TextView(this);
         TextView text4 = new TextView(this);
 
         text2.setText("Machine Type");
-        text2.setGravity(Gravity.LEFT);
+        text2.setGravity(Gravity.NO_GRAVITY);
 
         text3.setText("Status");
-        text3.setGravity(Gravity.RIGHT);
+        text3.setGravity(Gravity.NO_GRAVITY);
 
-        text4.setText("Reminder");
-        text4.setGravity(Gravity.CENTER_HORIZONTAL);
+        text4.setText("Notify");
+        text4.setGravity(Gravity.NO_GRAVITY);
 
         row1.addView(text2);
         row1.addView(text3);
@@ -193,9 +197,40 @@ public class IndividualHousing extends ActionBarActivity {
             row1 = new TableRow(this);
             row1.setPadding(0, 10, 0, 10);
             text2 = new TextView(this);
+            text2.setGravity(Gravity.CENTER_HORIZONTAL);
             text3 = new TextView(this);
+            text3.setGravity(Gravity.CENTER_HORIZONTAL);
             ImageView image1 = new ImageView(this);
-            CheckBox box1 = new CheckBox(this);
+            final CheckBox box1 = new CheckBox(this);
+
+            box1.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    if(box1.isChecked())
+                    {
+                        //box1.setText("checked");
+                        Context context = getApplicationContext();
+                        CharSequence text = "Notification set";
+                        int duration = Toast.LENGTH_SHORT;
+
+                        Toast toast = Toast.makeText(context, text, duration);
+                        toast.show();
+                    }
+                    else
+                    {
+                        //box1.setText("unchecked");
+                        Context context = getApplicationContext();
+                        CharSequence text = "Notification deleted";
+                        int duration = Toast.LENGTH_SHORT;
+
+                        Toast toast = Toast.makeText(context, text, duration);
+                        toast.show();
+                    }
+                }
+            });
+
+            box1.setGravity(Gravity.RIGHT);
+
             String available;
 
             text2.setText(building.get(i).type + " " + building.get(i).label);
@@ -217,6 +252,12 @@ public class IndividualHousing extends ActionBarActivity {
             }
 
             text3.setText(available);
+
+
+
+
+
+
 
             //image1.setImageDrawable(getDrawable(R.drawable.available));
             //image1.setBackgroundResource(R.drawable.available32);
